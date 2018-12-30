@@ -129,7 +129,6 @@ NOTES:
  *      the correct answers.
  */
 
-
 #endif
 /*
  * bitAnd - x&y using only ~ and |
@@ -138,9 +137,7 @@ NOTES:
  *   Max ops: 8
  *   Rating: 1
  */
-int bitAnd(int x, int y) {
-  return ~(~x | ~y);
-}
+int bitAnd(int x, int y) { return ~(~x | ~y); }
 /*
  * getByte - Extract byte n from word x
  *   Bytes numbered from 0 (LSB) to 3 (MSB)
@@ -149,9 +146,7 @@ int bitAnd(int x, int y) {
  *   Max ops: 6
  *   Rating: 2
  */
-int getByte(int x, int n) {
-  return x >> (n << 3) & 0xFF;
-}
+int getByte(int x, int n) { return x >> (n << 3) & 0xFF; }
 /*
  * logicalShift - shift x to the right by n, using a logical shift
  *   Can assume that 0 <= n <= 31
@@ -230,9 +225,7 @@ int bang(int x) {
  *   Max ops: 4
  *   Rating: 1
  */
-int tmin(void) {
-  return 1 << 31;
-}
+int tmin(void) { return 1 << 31; }
 /*
  * fitsBits - return 1 if x can be represented as an
  *  n-bit, two's complement integer.
@@ -267,9 +260,7 @@ int divpwr2(int x, int n) {
  *   Max ops: 5
  *   Rating: 2
  */
-int negate(int x) {
-  return ~x + 1;
-}
+int negate(int x) { return ~x + 1; }
 /*
  * isPositive - return 1 if x > 0, return 0 otherwise
  *   Example: isPositive(-1) = 0.
@@ -277,9 +268,7 @@ int negate(int x) {
  *   Max ops: 8
  *   Rating: 3
  */
-int isPositive(int x) {
-  return !(x >> 31) & !!x;
-}
+int isPositive(int x) { return !(x >> 31) & !!x; }
 /*
  * isLessOrEqual - if x <= y  then return 1, else return 0
  *   Example: isLessOrEqual(4,5) = 1.
