@@ -114,7 +114,7 @@ void simulate(int num_set_bits, int num_block_bits, int associativity,
     }
     linked_list_initialize(&cache_sets[i].ll, offsetof(cache_line, ll_node));
     splay_tree_initialize(&cache_sets[i].st, offsetof(cache_line, st_node),
-                    cache_line_cmp);
+                          cache_line_cmp);
   }
 
   FILE *trace_file = fopen(trace_file_name, "r");
