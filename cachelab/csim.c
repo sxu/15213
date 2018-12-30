@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -111,8 +112,8 @@ void simulate(int num_set_bits, int num_block_bits, int associativity,
       printf("malloc failed");
       exit(1);
     }
-    linked_list_init(&cache_sets[i].ll, offsetof(cache_line, ll_node));
-    splay_tree_init(&cache_sets[i].st, offsetof(cache_line, st_node),
+    linked_list_initialize(&cache_sets[i].ll, offsetof(cache_line, ll_node));
+    splay_tree_initialize(&cache_sets[i].st, offsetof(cache_line, st_node),
                     cache_line_cmp);
   }
 
@@ -145,8 +146,8 @@ void simulate(int num_set_bits, int num_block_bits, int associativity,
       if (verbose) {
         printf(" hit");
       }
-      linked_list_delete(&set->ll, hit);
-      linked_list_insert_head(&set->ll, hit);
+      linked_list_remove(&set->ll, hit);
+      linked_list_push_front(&set->ll, hit);
       if (access.mode == MODIFY) {
         hits++;
         if (verbose) {
@@ -162,13 +163,13 @@ void simulate(int num_set_bits, int num_block_bits, int associativity,
       if (set->st.size < associativity) {
         cache_line *new_line = set->lines + set->st.size;
         new_line->tag = tag;
-        linked_list_insert_head(&set->ll, new_line);
+        linked_list_push_front(&set->ll, new_line);
         assert(splay_tree_insert(&set->st, new_line));
       } else {
-        cache_line *new_line = (cache_line *)linked_list_delete_tail(&set->ll);
-        assert(splay_tree_delete(&set->st, new_line));
+        cache_line *new_line = (cache_line *)linked_list_pop_back(&set->ll);
+        assert(splay_tree_remove(&set->st, new_line));
         new_line->tag = tag;
-        linked_list_insert_head(&set->ll, new_line);
+        linked_list_push_front(&set->ll, new_line);
         assert(splay_tree_insert(&set->st, new_line));
         evictions++;
         if (verbose) {
