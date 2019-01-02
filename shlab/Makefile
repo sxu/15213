@@ -10,6 +10,10 @@ TSHARGS = "-p"
 CC = gcc
 CFLAGS = -Wall -O2
 FILES = $(TSH) ./myspin ./mysplit ./mystop ./myint
+TEST_CASES = 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16
+TESTS = $(foreach t, $(TEST_CASES), test$(t))
+RTESTS = $(foreach t, $(TEST_CASES), rtest$(t))
+CMPS = $(foreach t, $(TEST_CASES), cmp$(t))
 
 all: $(FILES)
 
@@ -25,76 +29,31 @@ handin:
 ##################
 
 # Run tests using the student's shell program
-test01:
-	$(DRIVER) -t trace01.txt -s $(TSH) -a $(TSHARGS)
-test02:
-	$(DRIVER) -t trace02.txt -s $(TSH) -a $(TSHARGS)
-test03:
-	$(DRIVER) -t trace03.txt -s $(TSH) -a $(TSHARGS)
-test04:
-	$(DRIVER) -t trace04.txt -s $(TSH) -a $(TSHARGS)
-test05:
-	$(DRIVER) -t trace05.txt -s $(TSH) -a $(TSHARGS)
-test06:
-	$(DRIVER) -t trace06.txt -s $(TSH) -a $(TSHARGS)
-test07:
-	$(DRIVER) -t trace07.txt -s $(TSH) -a $(TSHARGS)
-test08:
-	$(DRIVER) -t trace08.txt -s $(TSH) -a $(TSHARGS)
-test09:
-	$(DRIVER) -t trace09.txt -s $(TSH) -a $(TSHARGS)
-test10:
-	$(DRIVER) -t trace10.txt -s $(TSH) -a $(TSHARGS)
-test11:
-	$(DRIVER) -t trace11.txt -s $(TSH) -a $(TSHARGS)
-test12:
-	$(DRIVER) -t trace12.txt -s $(TSH) -a $(TSHARGS)
-test13:
-	$(DRIVER) -t trace13.txt -s $(TSH) -a $(TSHARGS)
-test14:
-	$(DRIVER) -t trace14.txt -s $(TSH) -a $(TSHARGS)
-test15:
-	$(DRIVER) -t trace15.txt -s $(TSH) -a $(TSHARGS)
-test16:
-	$(DRIVER) -t trace16.txt -s $(TSH) -a $(TSHARGS)
+
+$(TESTS): test%: trace%.txt $(TSH)
+	$(DRIVER) -t $< -s $(TSH) -a $(TSHARGS)
 
 # Run the tests using the reference shell program
-rtest01:
-	$(DRIVER) -t trace01.txt -s $(TSHREF) -a $(TSHARGS)
-rtest02:
-	$(DRIVER) -t trace02.txt -s $(TSHREF) -a $(TSHARGS)
-rtest03:
-	$(DRIVER) -t trace03.txt -s $(TSHREF) -a $(TSHARGS)
-rtest04:
-	$(DRIVER) -t trace04.txt -s $(TSHREF) -a $(TSHARGS)
-rtest05:
-	$(DRIVER) -t trace05.txt -s $(TSHREF) -a $(TSHARGS)
-rtest06:
-	$(DRIVER) -t trace06.txt -s $(TSHREF) -a $(TSHARGS)
-rtest07:
-	$(DRIVER) -t trace07.txt -s $(TSHREF) -a $(TSHARGS)
-rtest08:
-	$(DRIVER) -t trace08.txt -s $(TSHREF) -a $(TSHARGS)
-rtest09:
-	$(DRIVER) -t trace09.txt -s $(TSHREF) -a $(TSHARGS)
-rtest10:
-	$(DRIVER) -t trace10.txt -s $(TSHREF) -a $(TSHARGS)
-rtest11:
-	$(DRIVER) -t trace11.txt -s $(TSHREF) -a $(TSHARGS)
-rtest12:
-	$(DRIVER) -t trace12.txt -s $(TSHREF) -a $(TSHARGS)
-rtest13:
-	$(DRIVER) -t trace13.txt -s $(TSHREF) -a $(TSHARGS)
-rtest14:
-	$(DRIVER) -t trace14.txt -s $(TSHREF) -a $(TSHARGS)
-rtest15:
-	$(DRIVER) -t trace15.txt -s $(TSHREF) -a $(TSHARGS)
-rtest16:
-	$(DRIVER) -t trace16.txt -s $(TSHREF) -a $(TSHARGS)
 
+$(RTESTS): rtest%: trace%.txt $(TSHREF)
+	$(DRIVER) -t $< -s $(TSHREF) -a $(TSHARGS)
+
+$(CMPS): cmp%: trace%.txt $(TSH) $(TSHREF)
+	@echo $@
+	@$(DRIVER) -t $< -s $(TSH) -a $(TSHARGS) | sed \
+		-e 's/([0-9]\+)/()/g' \
+	        -e 's/^ \+[0-9]\+//g' \
+	       	-e 's/tshref/tsh/g' > .tsh.out
+	@$(DRIVER) -t $< -s $(TSHREF) -a $(TSHARGS) | sed \
+		-e 's/([0-9]\+)/()/g' \
+	        -e 's/^ \+[0-9]\+//g' \
+	       	-e 's/tshref/tsh/g' > .tshref.out
+	@diff .tsh.out .tshref.out
+
+cmps: $(foreach c, $(CMPS), $(c))
 
 # clean up
 clean:
 	rm -f $(FILES) *.o *~
-
+	rm -f .tsh.out .tshref.out
 
